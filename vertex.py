@@ -53,17 +53,17 @@ location = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
 print(f"Google Cloud project identifier: {project}")
 print(f"Google Cloud location: {location}")
 # LLM chat model name to use
-model_name = os.environ.get("MODEL_NAME", "chat-bison")
+model_name = os.environ.get("MODEL_NAME", "gemini-pro")
 print(f"LLM chat model name: {model_name}")
 # Token limit determines the maximum amount of text output from one prompt
-default_max_output_tokens = os.environ.get("MAX_OUTPUT_TOKENS", "512")
+default_max_output_tokens = os.environ.get("MAX_OUTPUT_TOKENS", "8192")
 # Sampling temperature,
 # it controls the degree of randomness in token selection
-default_temperature = os.environ.get("TEMPERATURE", "0.2")
+default_temperature = os.environ.get("TEMPERATURE", "0.9")
 # How the model selects tokens for output, the next token is selected from
-default_top_k = os.environ.get("TOP_K", "40")
+default_top_k = os.environ.get("TOP_K", "1")
 # Tokens are selected from most probable to least until the sum of their
-default_top_p = os.environ.get("TOP_P", "0.8")
+default_top_p = os.environ.get("TOP_P", "1")
 # API key
 default_api_key = f"sk-{secrets.token_hex(21)}"
 api_key = os.environ.get("OPENAI_API_KEY", default_api_key)
@@ -315,7 +315,7 @@ async def chat_completions(body: ChatBody, request: Request):
     # - codechat-bison: 6144
     memory = ConversationBufferMemory(
         memory_key="history",
-        max_token_limit=2048,
+        max_token_limit=30720,
         return_messages=True
     )
     # Today
