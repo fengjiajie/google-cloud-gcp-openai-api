@@ -59,7 +59,7 @@ print(f"LLM chat model name: {model_name}")
 default_max_output_tokens = os.environ.get("MAX_OUTPUT_TOKENS", "8192")
 # Sampling temperature,
 # it controls the degree of randomness in token selection
-default_temperature = os.environ.get("TEMPERATURE", "0.9")
+default_temperature = os.environ.get("TEMPERATURE", "0.7")
 # How the model selects tokens for output, the next token is selected from
 default_top_k = os.environ.get("TOP_K", "1")
 # Tokens are selected from most probable to least until the sum of their
@@ -325,8 +325,9 @@ async def chat_completions(body: ChatBody, request: Request):
     )
     # Add history
     for message in body.messages:
-        # if message.role == 'system':
-        #     system_prompt = message.content
+        if message.role == 'system':
+            memory.chat_memory.add_user_message(message.content)
+            memory.chat_memory.add_ai_message("好的。")
         if message.role == 'user':
             memory.chat_memory.add_user_message(message.content)
         elif message.role == 'assistant':
