@@ -35,7 +35,7 @@ from google.cloud import aiplatform
 
 # LangChain
 import langchain
-from langchain.chat_models import ChatVertexAI
+from langchain_google_vertexai import ChatVertexAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
@@ -319,15 +319,18 @@ async def chat_completions(body: ChatBody, request: Request):
         return_messages=True
     )
     # Today
-    memory.chat_memory.add_user_message("What day is today?")
-    memory.chat_memory.add_ai_message(
-        datetime.date.today().strftime("Today is %A, %B %d, %Y")
-    )
+    #memory.chat_memory.add_user_message("What day is today?")
+    #memory.chat_memory.add_ai_message(
+    #    datetime.date.today().strftime("Today is %A, %B %d, %Y")
+    #)
+
+    memory.chat_memory.add_user_message("你是 Gemini，一个由谷歌训练的基于大型语言模型的聊天机器人。你的主要任务是对用户的提问给出详实且精确的回答。请仔细分析用户的话语，对于复杂问题可以将逐步思考的过程输出给用户。使用中文与用户对话。")
+    memory.chat_memory.add_ai_message("你好！我是 Gemini，很高兴认识你。我会尽力理解你的问题，并给出详实而精确的答案。我会仔细分析你的话语，并尝试理解你的意图。对于复杂的问题，我会分享我的思考过程，以便你更好地理解我的答案。")
     # Add history
     for message in body.messages:
-        if message.role == 'system':
-            memory.chat_memory.add_user_message(message.content)
-            memory.chat_memory.add_ai_message("好的。")
+        #if message.role == 'system':
+        #    memory.chat_memory.add_user_message(message.content)
+        #    memory.chat_memory.add_ai_message("好的。")
         if message.role == 'user':
             memory.chat_memory.add_user_message(message.content)
         elif message.role == 'assistant':
